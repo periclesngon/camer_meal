@@ -1,3 +1,5 @@
+import 'package:camer_meals/pages/home_page.dart';
+import 'package:camer_meals/widget/button_bar.dart';
 import 'package:flutter/material.dart';
 
 // Import AuthService
@@ -32,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       // Navigate to the next page
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const NextPage()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     }
   }
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     // Navigate to the next page
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const NextPage()),
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 
@@ -63,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
     // Navigate to the next page
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const NextPage()),
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 
@@ -78,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
     // Navigate to the next page
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const NextPage()),
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 
@@ -104,7 +106,8 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: Image.asset(
                   'lib/pages/assets/camerlogo.png', // Replace with your logo path
-                  height: 100, // Adjust the size as needed
+                  height: 100, 
+                  // Adjust the size as needed
                 ),
               ),
               const SizedBox(height: 20), // Reduced spacing
@@ -285,22 +288,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-// Placeholder for the next page to navigate to after successful login
-class NextPage extends StatelessWidget {
-  const NextPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Next Page"),
-      ),
-      body: const Center(
-        child: Text("Welcome to the next page!"),
-      ),
-    );
-  }
-}
 
 // Placeholder for the sign-up page
 class CreateAccount extends StatelessWidget {

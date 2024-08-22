@@ -1,5 +1,6 @@
 import 'package:camer_meals/pages/login_page.dart';
 import 'package:camer_meals/pages/signup_page.dart';
+import 'package:camer_meals/widget/button_bar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginPage(),
         '/signup': (context) => const SignUpPage(),
-        '/next': (context) => const NextPage(),
+        '/next': (context) => const HomeScreen (),
       },
       debugShowCheckedModeBanner: false,
     );

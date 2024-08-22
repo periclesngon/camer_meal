@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'recipe_page.dart';  // Import the RecipePage
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -52,7 +54,9 @@ class Homepage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cameroonian Cuisine"),
+        title: const Center( 
+          child: Text("Cameroonian Cuisine")
+          ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -67,31 +71,26 @@ class Homepage extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                // Handle container tap here, e.g., navigate to a detail page
-                print('${foodItems[index]} tapped');
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipePage(foodItem: foodItems[index]),),
+                );
+
               },
               child: Container(
-                padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                  color: colors[index % colors.length], // Dynamic color change
-                  borderRadius: BorderRadius.circular(20), // 20% curve edges
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1), // Slight shadow
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+                  color: colors[index % colors.length],
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Center(
                   child: Text(
                     foodItems[index],
-                    textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: Colors.black, // Black text color
-                      fontSize: 22, // Font size 22
-                      fontWeight: FontWeight.w600, // Semi-bold font
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),

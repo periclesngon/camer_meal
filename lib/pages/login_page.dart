@@ -334,7 +334,7 @@ class SocialButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 13), // Reduced padding
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16), // Increased curves by 30%
         boxShadow: [
           BoxShadow(

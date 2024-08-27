@@ -1,6 +1,9 @@
+import 'dart:convert';  // For JSON decoding
+import 'dart:io';  // For file handling
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;  // For making HTTP requests
 import 'package:video_player/video_player.dart';
+import 'package:file_picker/file_picker.dart';
 
 class RecipePage extends StatefulWidget {
   final String foodItem;
@@ -21,29 +24,19 @@ class _RecipePageState extends State<RecipePage> {
     super.dispose();
   }
 
-  // Dummy API response simulation (replace with real API call)
+  // Make an API call to fetch the recipe details
   Future<Map<String, dynamic>> fetchRecipe(String foodItem) async {
-    // Simulated API response
-    return {
-      "ingredients": [
-        "1 kg of meat",
-        "2 cups of water",
-        "1 tsp salt",
-        "3 tomatoes",
-        "1 onion",
-        "1 tsp pepper",
-        "1 tbsp oil",
-      ],
-      "steps": [
-        "Chop the tomatoes and onions.",
-        "Heat the oil in a pan.",
-        "Add the onions and cook until golden brown.",
-        "Add the tomatoes and cook for another 5 minutes.",
-        "Add the meat and salt, and cook until the meat is tender.",
-        "Add water and simmer for 20 minutes.",
-        "Serve hot with your preferred side dish.",
-      ],
-    };
+    final response = await http.get(
+      Uri.parse('https://your-api-endpoint.com/recipes?name=$foodItem'),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON
+      return json.decode(response.body);
+    } else {
+      // If the server returns an error, throw an exception
+      throw Exception('Failed to load recipe');
+    }
   }
 
   Future<void> _pickVideo() async {
@@ -54,7 +47,7 @@ class _RecipePageState extends State<RecipePage> {
     if (result != null && result.files.single.path != null) {
       setState(() {
         _videoPath = result.files.single.path!;
-        _videoController = VideoPlayerController.file(result.files.single.file!)
+        _videoController = VideoPlayerController.file(File(_videoPath!))
           ..initialize().then((_) {
             setState(() {}); // Ensure the first frame is shown
           });
@@ -80,8 +73,8 @@ class _RecipePageState extends State<RecipePage> {
           }
 
           final recipe = snapshot.data!;
-          final ingredients = recipe['ingredients'] as List<String>;
-          final steps = recipe['steps'] as List<String>;
+          final ingredients = recipe['ingredients'] as List<dynamic>;
+          final steps = recipe['steps'] as List<dynamic>;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),

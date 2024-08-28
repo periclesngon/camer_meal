@@ -3,7 +3,7 @@ import 'dart:io';  // For file handling
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;  // For making HTTP requests
 import 'package:video_player/video_player.dart';
-import 'package:file_picker/file_picker.dart';
+
 
 class RecipePage extends StatefulWidget {
   final String foodItem;
@@ -16,7 +16,7 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage> {
   VideoPlayerController? _videoController;
-  String? _videoPath;
+  String? _videoUrl;
 
   @override
   void dispose() {
@@ -31,28 +31,21 @@ class _RecipePageState extends State<RecipePage> {
     );
 
     if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
+      // Parse the JSON response
       return json.decode(response.body);
     } else {
-      // If the server returns an error, throw an exception
+      // Handle errors
       throw Exception('Failed to load recipe');
     }
   }
 
-  Future<void> _pickVideo() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.video,
-    );
-
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        _videoPath = result.files.single.path!;
-        _videoController = VideoPlayerController.file(File(_videoPath!))
-          ..initialize().then((_) {
-            setState(() {}); // Ensure the first frame is shown
-          });
+  void _initializeVideo(String videoUrl) {
+    _videoUrl = videoUrl;
+    _videoController = VideoPlayerController.network(videoUrl)
+      ..initialize().then((_) {
+        setState(() {});  // Ensure the first frame is shown
+        _videoController?.play();  // Auto-play the video once initialized
       });
-    }
   }
 
   @override
@@ -73,93 +66,115 @@ class _RecipePageState extends State<RecipePage> {
           }
 
           final recipe = snapshot.data!;
+          final description = recipe['description'] as String;
           final ingredients = recipe['ingredients'] as List<dynamic>;
           final steps = recipe['steps'] as List<dynamic>;
+          final videoUrl = recipe['videoUrl'] as String?;
+
+          if (videoUrl != null && _videoController == null) {
+            _initializeVideo(videoUrl);
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Ingredients Container
+                // Food Description
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   margin: const EdgeInsets.only(bottom: 16.0),
                   decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                // Ingredients Container
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.only(bottom: 16.0),
+                  height: 200,  // Specify a fixed height for scrollable content
+                  decoration: BoxDecoration(
                     color: Colors.lightBlueAccent.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Ingredients",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      ...List.generate(ingredients.length, (index) {
-                        return Text(
-                          "${index + 1}. ${ingredients[index]}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Ingredients",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                      }),
-                    ],
+                        ),
+                        const SizedBox(height: 10),
+                        ...List.generate(ingredients.length, (index) {
+                          return Text(
+                            "${index + 1}. ${ingredients[index]}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 ),
                 // Steps Container
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   margin: const EdgeInsets.only(bottom: 16.0),
+                  height: 200,  // Specify a fixed height for scrollable content
                   decoration: BoxDecoration(
                     color: Colors.orangeAccent.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Steps",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      ...List.generate(steps.length, (index) {
-                        return Text(
-                          "${index + 1}. ${steps[index]}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-                // Video Upload Section
-                if (_videoController != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.greenAccent.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const Text(
-                          "Recipe Video",
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Steps",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        const SizedBox(height: 10),
+                        ...List.generate(steps.length, (index) {
+                          return Text(
+                            "${index + 1}. ${steps[index]}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black87,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+                // Video Section
+                if (_videoController != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Recipe Video",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -186,10 +201,10 @@ class _RecipePageState extends State<RecipePage> {
                       ),
                     ],
                   )
-                else
-                  ElevatedButton(
-                    onPressed: _pickVideo,
-                    child: const Text('Upload Recipe Video'),
+                else if (videoUrl == null)
+                  const Text(
+                    "No video available for this recipe",
+                    style: TextStyle(fontSize: 18, color: Colors.red),
                   ),
               ],
             ),

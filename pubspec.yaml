@@ -65,11 +65,43 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/pages/assets/camerlogo.png
-    - lib/pages/assets/facebook.png
-    - lib/pages/assets/apple-logo.png
-    - lib/pages/assets/search.png
-     
+
+
+- lib/pages/assets/camerlogo.png
+- lib/pages/assets/facebook.png  
+- lib/pages/assets/apple-logo.png 
+- lib/pages/assets/search.png
+- lib/pages/assets/ndole.jpg
+- lib/pages/assets/poulet_dg.jpg
+- lib/pages/assets/eru.jpg
+- lib/pages/assets/koki.jpg
+- lib/pages/assets/achu_yellow_soup.jpg
+- lib/pages/assets/soya.jpg
+- lib/pages/assets/fufu_corn_njama_njama.jpg
+- lib/pages/assets/mbongo_tchobi.jpg
+- lib/pages/assets/okok.jpg
+- lib/pages/assets/kondre.jpg
+- lib/pages/assets/brochettes.jpg
+- lib/pages/assets/egusi_pudding.jpg
+- lib/pages/assets/kwacoco.jpg
+- lib/pages/assets/plantains_with_beans.jpg
+- lib/pages/assets/pepper_soup.jpg
+- lib/pages/assets/cassava_leaves_stew.jpg
+- lib/pages/assets/bobolo.jpg
+- lib/pages/assets/ekwang.jpg
+- lib/pages/assets/riz_saute.jpg
+- lib/pages/assets/nnam_owondo.jpg
+- lib/pages/assets/kpwem.jpg
+- lib/pages/assets/corn_chaff.jpg
+- lib/pages/assets/miondo.jpg
+- lib/pages/assets/nchui.jpg
+- lib/pages/assets/accra_banana.jpg
+- lib/pages/assets/spaghetti_saute.jpg
+- lib/pages/assets/folere.jpg
+- lib/pages/assets/egusi_soup_pounded_yam.jpg
+- lib/pages/assets/okro_soup.jpg
+- lib/pages/assets/avocat.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
